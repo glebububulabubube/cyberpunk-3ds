@@ -167,9 +167,12 @@ static void update(float dt){
         // look with stick
         circlePosition c;
         hidCircleRead(&c);
-        // circlepad range -156..156
-        yaw += c.dx*0.0012f;
-        pitch += c.dy*0.0012f;
+        // dead zone to prevent drift when stick is centered
+        float dzx=0, dzy=0;
+        if(c.dx>15 || c.dx<-15) dzx=c.dx;
+        if(c.dy>15 || c.dy<-15) dzy=c.dy;
+        yaw += dzx*0.0012f;
+        pitch += dzy*0.0012f;
         if(pitch>0.8f)pitch=0.8f; if(pitch<-0.8f)pitch=-0.8f;
         // walk with d-pad
         float step=2.2f*dt;
